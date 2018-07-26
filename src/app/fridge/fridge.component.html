@@ -1,0 +1,107 @@
+<!-- 
+ ** Program Name : Angular Fridge
+ ** Author : Peter Cross
+ ** Date : July 26, 2018
+ */
+-->
+	 
+<!-- Div for whole Fridge content -->
+<div class='componentDiv' id='{{onLoad( [tblAdd, tblRemove], [tabAdd, tabRemove] )}}'>
+	<!-- Div for visible content -->
+	<div class='visibleContent'>
+		<!-- Table for List of Fridge Items -->
+		<table *ngIf="dataService.qtyOfItems() > 0">
+			<caption class='listTitle'>List of Fridge items</caption>
+			<tr>
+				<th>&nbsp;<b>#</b>&nbsp;</th>
+				<th>Item Name</th>
+				<th>Quantity</th>
+				<th></th>
+			</tr>
+			
+			<tr *ngFor="let item of dataService.getContents(); index as i" style=''>
+				<td>&nbsp;{{i+1}}&nbsp;</td>
+				<td><input type='text' style='width: 570px; border: none;' value='{{item.name}}' readonly></td>
+				<td><input type='text' style='width: 40px; border: none;' value='{{item.quantity}}' readonly></td>
+				<td>
+					<input type='button' value='x' (click)="delFridgeItem(i)" [disabled]="dataService.itemQty(i) > 0" class='delBtn' style='width: auto;'>
+				</td>
+			</tr>
+		</table>
+		<br>
+		
+		<!-- Button for creating adding/removing a fridge item -->
+		<input #newBtn type='button' (click)="addRemoveItems( fridgeForm, newBtn )" value='Add/Remove Items'  class='newBtn'>
+		
+		<!-- Div for adding/removing Fridge items form  -->
+		<div #fridgeForm  class='lightBox'>
+			<!-- Button to close form in the top right corner -->
+			<input type='button'  value='X' (click)="closeForm( fridgeForm, newBtn )" class='closeBtn'>
+			
+			<!-- Title of the form -->
+			<h3 class='formTitle'>Fridge contents</h3>
+			
+			<!-- Tabs -->
+			<div class='tabsDiv'>
+				<a href='#' #tabAdd (click)="activateFormTab(0)" >To Add</a>
+				<a href='#' #tabRemove (click)="activateFormTab(1)" >To Remove</a>
+			</div>
+			
+			<!-- Div for visible tab part of the recipe form -->
+			<div class='formContentDiv'>
+				<!-- Table for tab Add Items -->
+				<table #tblAdd class='formTables'>
+					<tr>
+						<th>&nbsp;<b>#</b>&nbsp;</th>
+						<th>Items to add</th>
+						<th>Quantity</th>
+						<th></th>
+					</tr>
+					
+					<tr *ngFor="let item of toAdd; index as i" >
+						<td>&nbsp;{{i+1}}&nbsp;</td>
+						<td><input type='text' [(ngModel)]="item.name"  #toAddName class='inputList' style='width: 515px;' readonly required></td>
+						<td><input type='number' [(ngModel)]="item.quantity" #toAddQty pattern='{{qtyPattern}}' class=' inputList' style='width: 50px;' required></td>
+						<td>
+							<input type='button' value='x' (click)="delItem(i)"  [disabled]="dataService.findItem( item.name ) >= 0"  class='delBtn' style=''>
+						</td>
+					</tr>
+					
+					<tr>
+						<td>&nbsp;&nbsp;</td>
+						<td><input type='text' #itemName value='' pattern='{{namePattern}}' style='width: 515px;' required></td>
+						<td><input type='number' #itemQty value='' pattern='{{qtyPattern}}' style='width: 50px;' required></td>
+						<td><input type='button' value='+' (click)="newItem( itemName, itemQty )" class='addBtn'></td>
+					</tr>
+				</table>
+				
+				<!-- Table for tab Remove Items -->
+				<table #tblRemove class='formTables'>
+					<tr>
+						<th>&nbsp;<b>#</b>&nbsp;</th>
+						<th>Items to remove</th>
+						<th>Quantity</th>
+					</tr>
+					
+					<tr *ngFor="let rmvItem of toRemove; index as i" >
+						<td>&nbsp;{{i+1}}&nbsp;</td>
+						<td><input type='text' [(ngModel)]="rmvItem.name" #toRemoveName class='inputList' style='width: 515px;' readonly required></td>
+						<td><input type='number' [(ngModel)]="rmvItem.quantity" #toRemoveQty pattern='{{qtyPattern}}' class=' inputList' style='width: 50px;' required></td>
+					</tr>
+					
+					<tr>
+						<td>&nbsp;&nbsp;</td>
+						<td><input type='text' value='' style='width: 515px; border: 1px solid transparent;' readonly required></td>
+						<td><input type='number' value='' style='width: 50px; border: 1px solid transparent;' readonly required></td>
+					</tr>
+				</table>
+			</div>	
+			
+			<!-- Div for Save and Cancel buttons of Fridge Contents form -->
+			<div class='formButtons'>
+				<input type='button' value=' Save ' (click)="saveForm( fridgeForm, newBtn )" class='formBtn'>
+				<input type='button' value='Cancel' (click)="closeForm( fridgeForm, newBtn )" class='formBtn'>
+			</div>
+		</div>
+	</div>
+</div>

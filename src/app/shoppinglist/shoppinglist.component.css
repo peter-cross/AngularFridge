@@ -1,0 +1,57 @@
+/** Program Name : Angular Fridge
+ ** Author : Peter Cross
+ ** Date : July 26, 2018
+ */
+
+table {
+	padding: 2px;
+	border-collapse: collapse;
+	display: inline-block;
+}
+
+th, td {
+	border: 1px solid;
+	padding: 2px 1px; 
+	margin: 0;
+	height: 20px;
+	text-align: center;
+	width: auto;
+}
+
+input {
+	display: inline-block;
+	padding: 3px 10px;
+	clear: both;
+}
+
+input[type='button'] {
+	cursor: pointer;	
+}
+
+.componentDiv {
+	text-align: center; 
+	display: inline-block; 
+	width: 100%;
+	min-width: 722px;
+	min-height: 84px;
+}
+
+.visibleContent {
+	margin: 0 auto;  
+	width: auto; 
+	display: inline-block; 
+	text-align: left;
+}
+
+.formTitle {
+	text-align: left; 
+	width: 436px;
+	margin: 20px auto 5px auto;
+}
+
+.listTitle {
+	font-size: 24px; 
+	margin-bottom: 10px;
+	margin-top: 0px;
+	font-weight: 500;
+}

@@ -1,0 +1,44 @@
+<!-- 
+ ** Program Name : Angular Fridge
+ ** Author : Peter Cross
+ ** Date : July 26, 2018
+ **
+-->
+
+<div style="text-align:center">
+  <h1>{{ title }}</h1>
+</div>
+
+			
+<!-- Div for visible tab part of the form -->
+<div class='formContentDiv'>
+	<div #aboutForm  class='lightBox' id='{{onLoadAbout( aboutForm, aboutCanvas, canvasImgage )}}'>
+		<canvas #aboutCanvas style='margin-bottom: 5px; height: 400px;'>
+			<img #canvasImgage src='assets/fridge.jpg' style='display: none'/>
+		</canvas>
+		<input type='button' value=' OK ' (click)="closeAbout()" class='formBtn'>
+	</div>
+	
+	<!-- Div for visible content -->
+	<div class='visibleContent'>
+		<!-- Tabs -->
+		<div #tabs class='tabsDiv' id='{{onLoadTabs( [appFridge, appRecipes, appShoppingList], [ tabFridge, tabRecipes, tabShoppingList ], tabs )}}'>
+			<a href='#' #tabFridge (click)="activateTab(0)" >In Fridge</a>
+			<a href='#' #tabRecipes (click)="activateTab(1)" >Recipes</a>
+			<a href='#' #tabShoppingList (click)="activateTab(2)" >Shopping List</a>
+		</div>
+		
+		<div #appFridge class='formApps'>
+			<app-fridge></app-fridge>
+		</div>
+		
+		<div #appRecipes class='formApps'>
+			<app-recipe></app-recipe>
+		</div>
+		
+		<div #appShoppingList class='formApps'>
+			<app-shoppinglist ></app-shoppinglist>
+		</div>
+	</div>
+		
+</div>

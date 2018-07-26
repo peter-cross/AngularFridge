@@ -1,0 +1,144 @@
+<!-- 
+ ** Program Name : Angular Fridge
+ ** Author : Peter Cross
+ ** Date : July 26, 2018
+ **
+-->
+	 
+<!-- Div for whole Recipes content -->
+<div class='componentDiv' id='{{onLoad( [tblIngr, tblInstr], [tabIngr, tabInstr] )}}'>
+	<!-- Div for visible content -->
+	<div class='visibleContent'>
+		<!-- Table for List of Recipes -->
+		<table *ngIf="dataService.numberOfRecipes() > 0">
+			<caption class='listTitle'>List of Recipes</caption>
+			<tr>
+				<th>&nbsp;<b>#</b>&nbsp;</th>
+				<th>Recipe Name</th>
+				<th># of ingr</th>
+				<th>Steps</th>
+				<th>Time, min</th>
+				<th></th>
+			</tr>
+			
+			<tr *ngFor="let recipe of dataService.getRecipes(); index as i" style=''>
+				<td>&nbsp;{{i+1}}&nbsp;</td>
+				<td><input type='text' style='width: 404px; border: none;' value='{{recipe.name}}' readonly></td>
+				<td><input type='text' style='width: 40px; border: none;' value='{{recipe.ingredients.length}}' readonly></td>
+				<td><input type='text' style='width: 25px; border: none;' value='{{recipe.instructions.length}}' readonly></td>
+				<td><input type='text' style='width: 40px; border: none;' value='{{recipe.estimatedTime}}' readonly></td>
+				<td>
+					<input type='button' value='[ _ ]' (click)="editRecipe( i, recipeForm )" class='editBtn' style='width: auto;'>
+					<input type='button' value='x' (click)="delRecipe(i)" class='delBtn' style='width: auto;'>
+				</td>
+			</tr>
+		</table>
+		<br>
+		<!-- Button for creating new recipe -->
+		<input #newRecipeBtn type='button' value='New Recipe' (click)="newRecipe( recipeForm, newRecipeBtn )" class='newBtn'>
+			
+		<!-- Div for creating/editing Recipe form  -->
+		<div #recipeForm  class='lightBox'>
+			<!-- Button to close form in the top right corner -->
+			<input type='button' (click)="closeForm( recipeForm, newRecipeBtn )" value='X' class='closeBtn'>
+			
+			<!-- Title of the form -->
+			<h3 class='formTitle'>{{(dataService.findRecipe( recipe ) >= 0 ? 'Edit ' : 'New ' )}}Recipe</h3>
+			
+			<!-- Input field for Recipe name -->
+			<div class='recipeInputDiv'>
+				<label>Recipe name:</label><br>
+				<input type='text' [(ngModel)]="recipe"  style='width: 545px;'>
+			</div>
+			
+			<!-- Input field for Recipe estimated time -->
+			<div class='recipeInputDiv'>
+				<label>Estm.time, min:</label><br>
+				<!-- <input type='text' #estimatedTime value='' style='width: 80px;'> -->
+				<input type='number' [(ngModel)]="estTime" pattern='{{qtyPattern}}' style='width: 80px;'>
+			</div>
+			
+			<!-- Tabs -->
+			<div class='tabsDiv'>
+				<a href='#' #tabIngr (click)="activateRecipeTab(0)" >Ingredients</a>
+				<a href='#' #tabInstr (click)="activateRecipeTab(1)" >Instructions</a>
+			</div>
+			
+			<!-- Div for visible tab part of the recipe form -->
+			<div class='formContentDiv'>
+				<!-- Table for tab Ingredients -->
+				<table #tblIngr class='formTables'>
+					<tr>
+						<th>&nbsp;<b>#</b>&nbsp;</th>
+						<th>Ingredient</th>
+						<th>Quantity</th>
+						<th>&nbsp;</th>
+					</tr>
+					
+					<tr *ngFor="let ingredient of ingredients; index as i" >
+						<td>&nbsp;{{i+1}}&nbsp;</td>
+						<td>
+							<select  [(ngModel)]="ingredient.name" #ingrName class='inputList' style="width: 495px; text-align: left;" disabled required>
+								<option value=''></option>
+								<option *ngFor="let item of dataService.getContents()" value="{{item.name}}" >
+									{{ item.name }}
+								</option>
+							</select>
+						</td>
+						
+						<td><input type='number' [(ngModel)]="ingredient.quantity" #ingrQty pattern='{{qtyPattern}}' class=' inputList' style='width: 50px;' disabled required></td>
+						<td>
+							<input type='button' value='[ _ ]' #btnIngrEdit (click)="editIngredient( ingrName, ingrQty, btnIngrEdit, i )" class='editBtn' style='width: auto;'>
+							<input type='button' value='x' (click)="delIngredient(i)" class='delBtn' style='width: auto;'>
+						</td>
+					</tr>
+					
+					<tr>
+						<td>&nbsp;&nbsp;</td>
+						<td>
+							<select #ingredientName style="width: 495px; text-align: left;" required>
+								<option value=''></option>
+								<option *ngFor="let item of dataService.getContents()" value="{{item.name}}" >
+									{{ item.name }}
+								</option>
+							</select>
+						</td>
+						<td><input type='number' #ingredientQty value='' pattern='{{qtyPattern}}' style='width: 50px;' required></td>
+						<td><input type='button' value='+' (click)="newIngredient( ingredientName, ingredientQty )" class='addBtn'></td>
+					</tr>
+				</table>
+				
+				<!-- Table for tab Instructions -->
+				<table #tblInstr class='formTables'>
+					<tr>
+						<th>&nbsp;<b>#</b>&nbsp;</th>
+						<th>Instruction</th>
+						<th>&nbsp;</th>
+					</tr>
+					
+					<tr *ngFor="let instruction of instructions; index as i" >
+						<td>&nbsp;{{i+1}}&nbsp;</td>
+						<td><input type='text' #instr class='inputList' style='width: 548px;' value="{{instruction}}" disabled required></td>
+						<!-- <td><input type='text' [(ngModel)]="instructions[i]" #instr class='inputList' style='width: 510px;' readonly required></td> -->
+						<td>
+							<input type='button' value='[ _ ]' #btnInstrEdit (click)="editInstruction( instr, btnInstrEdit, i )" class='editBtn' style='width: auto;'>
+							<input type='button' value='x' (click)="delInstruction(i)" class='delBtn' style='width: auto;'>
+						</td>
+					</tr>
+					
+					<tr>
+						<td>&nbsp;&nbsp;</td>
+						<td><input type='text' #instruction value='' style='width: 548px;' required></td>
+						<td><input type='button' value='+' (click)="newInstruction( instruction )" class='addBtn'></td>
+					</tr>
+				</table>
+			</div>
+			
+			<!-- Div for Save and Cancel buttons of Recipe form -->
+			<div class='formButtons'>
+				<input type='button' value=' Save ' (click)="saveForm( recipeForm, newRecipeBtn )" class='formBtn'>
+				<input type='button' value='Cancel' (click)="closeForm( recipeForm, newRecipeBtn )" class='formBtn'>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,36 @@
+<!-- 
+/** Program Name : Angular Fridge
+ ** Author : Peter Cross
+ ** Date : July 26, 2018
+ **
+-->
+	 
+<!-- Div for whole Shopping List content -->
+<div class='componentDiv' id=''>
+	<!-- Div for visible content -->
+	<div class='visibleContent'>
+		<div style='margin: 5px auto; width: 336px;'>
+			<h3 class='listTitle'>Shopping List for recipe:</h3>
+			<select  #recipe (change)="updateShoppingList( $event )" style="width: 336px; text-align: left;" required>
+				<option value=''></option>
+				<option *ngFor="let rcp of dataService.getRecipeNames(); index as i" value="{{i}}" >
+					{{ rcp }}
+				</option>
+			</select>
+		</div>
+		<br>	
+		<!-- Table for List of Shopping Items -->
+		<table *ngIf="shoppingListAvailable()"> <!--  -->
+			<tr>
+				<th>&nbsp;<b>#</b>&nbsp;</th>
+				<th>Item Name</th>
+				<th>Quantity</th>
+			</tr>
+			<tr *ngFor="let item of shoppingList; index as i" style=''>
+				<td>&nbsp;{{i+1}}&nbsp;</td>
+				<td><input type='text' style='width: 610px; border: none;' value='{{item.name}}' readonly></td>
+				<td><input type='text' style='width: 40px; border: none;' value='{{item.quantity}}' readonly></td>
+			</tr>
+		</table>
+	</div>
+</div>
